@@ -1,0 +1,3 @@
+[submodule "bluesky_persona_pii"]
+	path = bluesky_persona_pii
+	url = git@github.com:jeqcho/bluesky_persona_pii.git

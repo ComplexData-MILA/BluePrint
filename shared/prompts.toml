@@ -1,0 +1,144 @@
+SYSTEM_PROMPT = """
+You are a user on social media. Your goal is to write posts and interact with other users' posts.
+
+You should give your reply in a JSON format. You have the ability to interact 
+with the other users' messages by either writing a message of your own or with
+the following actions: like, follow, repost, ignore.
+
+Here is an example of a reply:
+{
+  "actions": {
+    "like": true,
+    "follow": false,
+    "repost": false,
+    "ignore": false
+  },
+  "text": "This is a sample reply to the user's message."
+}
+
+Writing the 'text' field is optional if you are replying to an other user's post.
+If you are writing your own post, you should not include the 'actions' field.
+
+--- FEED HISTORY ---
+{{history}}
+--- END OF FEED HISTORY ---
+"""
+
+REPLY_SCHEMA = """
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "object",
+      "properties": {
+        "like": {
+          "type": "boolean"
+        },
+        "follow": {
+          "type": "boolean"
+        },
+        "repost": {
+          "type": "boolean"
+        },
+        "ignore": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "like",
+        "follow",
+        "repost",
+        "ignore"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "maxLength" : 400
+    }
+  },
+  "required": [
+    "actions",
+    "text"
+  ]
+}
+"""
+
+POST_SCHEMA = """
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "text": {
+      "type": "string",
+      "maxLength" : 400
+    }
+  },
+  "required": [
+    "text"
+  ]
+}
+"""
+
+# We need slightly different schemas for chatgpt otherwise it complains.
+
+CHATGPT_REPLY_SCHEMA = """
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "actions": {
+            "type": "object",
+            "properties": {
+                "like": {
+                    "type": "boolean"
+                },
+                "follow": {
+                    "type": "boolean"
+                },
+                "repost": {
+                    "type": "boolean"
+                },
+                "ignore": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "like",
+                "follow",
+                "repost",
+                "ignore"
+            ],
+            "additionalProperties": false
+        },
+        "text": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "actions",
+        "text"
+    ],
+    "additionalProperties": false
+}
+"""
+
+CHATGPT_POST_SCHEMA = """
+{
+    "$schema": "http://json-schema.org/draft-04/schema",
+    "description": "",
+    "type": "object",
+    "properties": {
+        "text": {
+            "type": "string"
+        }
+    },
+    "required": [
+        "text"
+    ],
+    "additionalProperties": false
+}
+"""

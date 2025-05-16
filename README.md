@@ -18,6 +18,10 @@ Code for evaluations can be found at the [evaluating](evaluating/) folder.
 
 PII removal code can be found at the submodule [bluesky_persona_pii](https://github.com/jeqcho/bluesky_persona_pii/tree/main).
 
+## Scratch
+
+The scratch folder contains a placeholder dataset to demonstrate how the pipeline works. It is also used for various files created during execution of the pipeline.
+
 ## License
 
 MIT License

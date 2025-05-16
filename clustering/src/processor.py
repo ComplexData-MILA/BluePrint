@@ -35,8 +35,9 @@ class SocialMediaProcessor:
     def load_user_cache(self):
         """Load user data cache if it exists"""
         try:
-            if os.path.exists(USER_CACHE_FILE):
-                with open(USER_CACHE_FILE, 'rb') as f:
+            cache_file_path = os.path.expanduser(USER_CACHE_FILE)
+            if os.path.exists(cache_file_path):
+                with open(cache_file_path, 'rb') as f:
                     saved_user_data = pickle.load(f)
                     # Update the data parser's user data with the cached data
                     for user_id, data in saved_user_data.items():
@@ -50,8 +51,10 @@ class SocialMediaProcessor:
     def save_user_cache(self):
         """Save user data cache"""
         try:
+            cache_file_path = os.path.expanduser(USER_CACHE_FILE)
+            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
             # Convert defaultdict to regular dict for saving
-            with open(USER_CACHE_FILE, 'wb') as f:
+            with open(cache_file_path, 'wb') as f:
                 pickle.dump(dict(self.user_data), f)
             logger.info("Saved user cache successfully")
         except Exception as e:
@@ -87,7 +90,7 @@ class SocialMediaProcessor:
         logger.info(f"Clustering resulted in {actual_n_clusters} clusters.")
         
         # Define and create the output directory based on actual clusters
-        self.output_dir = f"/scratch/{USERNAME}/processed_{actual_n_clusters}_clusters"
+        self.output_dir = os.path.expanduser(f"~/bluesky_blueprint/scratch/processed_{actual_n_clusters}_clusters")
         os.makedirs(self.output_dir, exist_ok=True)
         logger.info(f"Output directory set to: {self.output_dir}")
 

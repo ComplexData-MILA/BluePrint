@@ -70,7 +70,7 @@ class DataParser:
         from collections import defaultdict
         
         day_str = f"{day:02d}"
-        day_path = os.path.join(DATA_ROOT, day_str)
+        day_path = os.path.join(os.path.expanduser(DATA_ROOT), day_str)
         
         # Create a new EmbeddingManager for this process
         embedding_manager = EmbeddingManager()

@@ -1,19 +1,16 @@
-\
 import os
 import json
 import getpass
 import random
 import argparse
-from pathlib import Path
 import glob
-import math
 # import openai # Uncomment if using OpenAI API
 
 # --- Configuration ---
 USERNAME = getpass.getuser()
-DEFAULT_INPUT_DIR = f"/scratch/{USERNAME}/pii_removed/processed_25_clusters_hashed"
-DEFAULT_OUTPUT_DIR = f"/scratch/{USERNAME}/instruction_following"
-DEFAULT_DOLLY_PATH = f"/scratch/{USERNAME}/databricks-dolly-15k.jsonl"
+DEFAULT_INPUT_DIR = os.path.expanduser("~/bluesky_blueprint/scratch/pii_removed/processed_25_clusters_hashed")
+DEFAULT_OUTPUT_DIR = os.path.expanduser("~/bluesky_blueprint/scratch/instruction_following")
+DEFAULT_DOLLY_PATH = os.path.expanduser("~/bluesky_blueprint/scratch/databricks-dolly-15k.jsonl")
 # OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY") # Uncomment and set env var if using OpenAI
 # if OPENAI_API_KEY:
 #     openai.api_key = OPENAI_API_KEY

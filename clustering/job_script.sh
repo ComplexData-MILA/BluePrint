@@ -1,8 +1,9 @@
 #!/bin/bash
 #SBATCH --account=def-rrabba
-#SBATCH --time=10:00:00
-#SBATCH --mem-per-cpu=160G
+#SBATCH --time=1:00:00
+#SBATCH --mem-per-cpu=16G
 #SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=1
 #SBATCH --cpus-per-task=10
 
 # This script is used to run the clustering job on a distributed compute cluster.

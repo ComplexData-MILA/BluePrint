@@ -18,8 +18,7 @@ The data processing pipeline:
 In order to run this pipeline, it is important to note that an initial dataset
 is required. A dummy placeholder dataset is provided in `bluesky_blueprint/scratch` to
 demonstrate what kind of file structure is expected, but
-it should be replaced with your own data and does **NOT** contain enough data
-to do any kind of clustering. For safety and ethics reasons, we do
+it should be replaced with your own data. For safety and ethics reasons, we do
 not provide our own raw unanonymized data. Some info about the expected input formats
 is available in `expected_input_format.md` and `expected_input_format_examples.json`.
 

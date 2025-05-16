@@ -26,8 +26,9 @@ class EmbeddingManager:
     def load_cache(self):
         """Load embedding cache if it exists"""
         try:
-            if os.path.exists(EMBEDDING_CACHE_FILE):
-                with open(EMBEDDING_CACHE_FILE, 'rb') as f:
+            cache_file_path = os.path.expanduser(EMBEDDING_CACHE_FILE)
+            if os.path.exists(cache_file_path):
+                with open(cache_file_path, 'rb') as f:
                     self.embedding_cache = pickle.load(f)
                 logger.info(f"Loaded {len(self.embedding_cache)} cached embeddings")
         except Exception as e:
@@ -36,7 +37,9 @@ class EmbeddingManager:
     def save_cache(self):
         """Save embedding cache"""
         try:
-            with open(EMBEDDING_CACHE_FILE, 'wb') as f:
+            cache_file_path = os.path.expanduser(EMBEDDING_CACHE_FILE)
+            os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+            with open(cache_file_path, 'wb') as f:
                 pickle.dump(self.embedding_cache, f)
             logger.info(f"Saved {len(self.embedding_cache)} embeddings to cache")
         except Exception as e:

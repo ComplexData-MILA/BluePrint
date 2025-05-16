@@ -54,12 +54,7 @@ python src/main.py --n-clusters 25 --start-date 1 --end-date 31 --n-workers 1
 #### Output
 
 The script generates the following outputs in the specified output directory:
-- `cluster_[id].jsonl`: Data files for each cluster containing:
-    - Conversation chains
-    - Like actions
-    - Repost actions
-    - Follow actions
-    - Ignored content
+- `cluster_[id].jsonl`: Data files for each cluster containing conversation chains
 - `user_clusters.json`: Mapping of users to their assigned clusters
 
 #### Cache Files

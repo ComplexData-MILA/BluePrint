@@ -12,8 +12,6 @@ from transformers import (
     Trainer,
     DataCollatorForLanguageModeling
 )
-from typing import Optional, Dict, Union, Any
-import getpass
 from pathlib import Path
 import argparse
 import toml
@@ -30,13 +28,12 @@ parser.add_argument("--focal_loss", action="store_true", help="Use focal loss")
 args = parser.parse_args()
 
 # Set cache directory and file paths
-USERNAME = getpass.getuser()
 MODEL_NAME = args.model_name
-os.environ["HF_HOME"] = f"/scratch/{USERNAME}/HF-cache"
-DATASET_PATH = f"/scratch/{USERNAME}/pii_removed/processed_25_clusters_hashed/cluster_{args.slurm_array_task_id}.jsonl"
-INSTRUCTION_TUNING_DATASET_PATH = f"/scratch/{USERNAME}/instruction_following/cluster_{args.slurm_array_task_id}.jsonl"
-OUTPUT_DIR = f"/scratch/{USERNAME}/{MODEL_NAME}-lora-finetuned-{args.slurm_array_task_id}{'-no-focal' if not args.focal_loss else ''}"
-EVALUATION_DATASET_FOLDER = f"/scratch/{USERNAME}/evaluation_dataset"
+os.environ["HF_HOME"] = os.path.expanduser(f"~/bluesky_blueprint/scratch/HF-cache")
+DATASET_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/pii_removed/processed_25_clusters_hashed/cluster_{args.slurm_array_task_id}.jsonl")
+INSTRUCTION_TUNING_DATASET_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/instruction_following/cluster_{args.slurm_array_task_id}.jsonl")
+OUTPUT_DIR = os.path.expanduser(f"~/bluesky_blueprint/scratch/{MODEL_NAME}-lora-finetuned-{args.slurm_array_task_id}{'-no-focal' if not args.focal_loss else ''}")
+EVALUATION_DATASET_FOLDER = os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset")
 MAX_NUM_SAMPLES = 30_000  # Subsample the dataset to a maximum number of samples
 NUM_SAVED_VALIDATION_SAMPLES = 1000  # Number of validation samples to save
 os.makedirs(OUTPUT_DIR, exist_ok=True)
@@ -75,7 +72,7 @@ def load_model():
         torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
-        cache_dir=f"/scratch/{USERNAME}/HF-cache"
+        cache_dir=os.path.expanduser(f"~/bluesky_blueprint/scratch/HF-cache")
     )
 
     # Configure LoRA

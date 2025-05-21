@@ -82,6 +82,30 @@ This script automates the execution of `compute_metrics.py`.
 *   **Generated Data**: Files (e.g., JSONL) containing the outputs produced by the fine-tuned models on the evaluation datasets.
 *   **Metrics Reports**: Files (e.g., JSON, CSV, text) summarizing the computed performance metrics for each model or experiment.
 
+### Computed Metrics
+
+The `compute_metrics.py` script calculates several metrics to evaluate model performance. These include:
+
+*   **Semantic Similarity using Embeddings:** These metrics assess how semantically similar the generated text is to the reference (real) text.
+    *   **Average Embedding Cosine Similarity**: Measures the cosine similarity between the mean embeddings of the entire set of real texts and the generated texts. A higher score indicates greater overall semantic similarity.
+    *   **Maximum Cosine Similarity**: For each generated text, this finds the highest cosine similarity to any text in the real dataset. The maximum of these scores is reported, indicating how well the best-generated samples match the real data.
+    *   **Embedding JS Divergence**: Calculates the Jensen-Shannon divergence between the distributions of text embeddings from the real and generated datasets. A lower score suggests that the two distributions are more similar.
+
+*   **Topic Distribution Analysis:**
+    *   **TF-IDF Jaccard Similarity**: This metric compares the most important terms (identified by TF-IDF) in the real and generated texts. It computes the Jaccard similarity between the sets of top N terms, where a higher score means more overlap in topics.
+
+*   **Action Statistics:**
+    *   **F1 Score**: When evaluating social media interactions, models might also predict actions (e.g., like, reply, repost). This F1 score measures the accuracy of these predicted actions against the ground truth actions in the evaluation dataset.
+
+*   **Diagonality Scores**: This set of scores evaluates a model's ability to capture the specific characteristics of the persona (cluster) it was trained on. For each of the following metrics, a diagonality score is computed. A higher diagonality score indicates that a model performs better on data from its own persona/cluster compared to data from other personas/clusters.
+    *   Jaccard Similarity
+    *   Average Embedding Cosine Similarity
+    *   Maximum Cosine Similarity
+    *   F1 Scores (for actions)
+    *   Inverted Embedding JS Divergence (since lower JS Divergence is better, the value is inverted for the diagonality calculation, so higher is still better).
+
+The script outputs these metrics in a JSON file, allowing for detailed analysis of model performance across different aspects and personas.
+
 ### Hardware Requirements
 
 *   **CPU/Memory**: `compute_metrics.py` might not be GPU-intensive but could require significant CPU and RAM depending on the dataset size.

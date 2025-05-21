@@ -18,8 +18,7 @@ The data processing pipeline:
 In order to run this pipeline, it is important to note that an initial dataset
 is required. A dummy placeholder dataset is provided in `bluesky_blueprint/scratch` to
 demonstrate what kind of file structure is expected, but
-it should be replaced with your own data and does **NOT** contain enough data
-to do any kind of clustering. For safety and ethics reasons, we do
+it should be replaced with your own data. For safety and ethics reasons, we do
 not provide our own raw unanonymized data. Some info about the expected input formats
 is available in `expected_input_format.md` and `expected_input_format_examples.json`.
 
@@ -55,12 +54,7 @@ python src/main.py --n-clusters 25 --start-date 1 --end-date 31 --n-workers 1
 #### Output
 
 The script generates the following outputs in the specified output directory:
-- `cluster_[id].jsonl`: Data files for each cluster containing:
-    - Conversation chains
-    - Like actions
-    - Repost actions
-    - Follow actions
-    - Ignored content
+- `cluster_[id].jsonl`: Data files for each cluster containing conversation chains
 - `user_clusters.json`: Mapping of users to their assigned clusters
 
 #### Cache Files

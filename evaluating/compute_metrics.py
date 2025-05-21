@@ -33,17 +33,17 @@ args = parser.parse_args()
 
 # Set file paths
 USERNAME = getpass.getuser()
-DATASET_PATH = f"/scratch/{USERNAME}/evaluation_dataset"
-RESULTS_PATH = f"/scratch/{USERNAME}/model_evaluation/model_evaluation_metrics.json"
+DATASET_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset")
+RESULTS_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/model_evaluation/model_evaluation_metrics.json")
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"
 SEED = args.seed
 SUBSAMPLE = args.subsample
 FORCE_RECOMPUTE = args.force_recompute
-CACHE_DIR = f"/scratch/{USERNAME}/caches"
+CACHE_DIR = os.path.expanduser(f"~/bluesky_blueprint/scratch/caches")
 
 
 # Set HuggingFace cache path for embeddings model
-os.environ["HF_HOME"] = f"/scratch/{USERNAME}/HF-cache"
+os.environ["HF_HOME"] = os.path.expanduser(f"~/bluesky_blueprint/scratch/HF-cache")
 
 # 0. LOAD DATA
 def filter_text(text: str):

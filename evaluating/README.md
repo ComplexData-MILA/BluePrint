@@ -1,67 +1,97 @@
-# Evaluation Metrics for Social Media Personas
+# Model Evaluation for Social Media Persona Simulation
 
-This document outlines the evaluation metrics used to assess how well our models imitate real social media personas.
+This directory contains scripts and utilities for evaluating the performance of fine-tuned Large Language Models (LLMs) in the context of social media persona simulation. The evaluation process typically involves generating responses from the models on test datasets and then computing various metrics to assess their quality, and persona consistency.
 
-## Implemented Metrics
+## Overview
 
-We've implemented several metrics to evaluate the quality of generated content:
+The evaluation pipeline generally consists of two main stages:
+1.  **Data Generation**: Using fine-tuned models to generate responses or continue conversations based on evaluation prompts or datasets.
+2.  **Metrics Computation**: Calculating quantitative metrics on the generated data.
 
-- **Embedding-based Metrics**:
-    - Max cosine similarity between real and generated embeddings
-    - Cosine similarity of average embeddings
-    
-- **Content Comparison**:
-    - Jaccard similarity of TF-IDF vectors
-    - Jensen–Shannon divergence for comparing distributions
-    
-- **Behavioral Analysis**:
-    - Action statistics comparison (likes, reposts, follows, etc.)
-    
-- **Evaluation Quality**:
-    - "Diagonality measure" - assessing if models are closest to their target clusters
-    - Human evaluation results
-    - LLM-as-judge classification results
+Scripts are provided to automate these stages, with support for SLURM cluster execution for larger-scale evaluations.
 
-## Current Evaluation Procedure
+## User Guide
 
-Our evaluation follows this process:
+### Prerequisites
 
-1. Select validation samples from each cluster, excluding them from model training
-2. Use trained models to predict the last message in each validation chain
-3. Compare generated messages with real messages
-4. Apply metrics to measure similarity and quality of imitation
+1.  **Project Setup**:
+    *   Ensure the `bluesky_blueprint` repository is cloned, preferably in your home directory.
+    *   Fine-tuned models (LoRA adapters and tokenizer configurations) should be available, typically from the `bluesky_blueprint/finetuning/scratch/` directory.
+    *   Evaluation datasets should be prepared. These might be held-out sets from the clustering/instruction generation phase or specifically crafted evaluation prompts.
+    *   The scripts might rely on `prompts.toml` from the `../shared/` directory for system prompts during generation.
 
-This approach allows for direct comparison since we're measuring if trained models behave in the same way as the cluster they should imitate **when given the same prompt**.
+2.  **Python Environment**:
+    *   Navigate to the `bluesky_blueprint/evaluating` directory.
+    *   It's recommended to use a virtual environment similar to the one used for fine-tuning, or create a new one and install dependencies:
+        ```bash
+        cd ~/bluesky_blueprint/evaluating
+        virtualenv ENV-evaluating
+        source ENV-evaluating/bin/activate
+        pip install -r requirements.txt
+        ```
 
-## Cross-Model Comparison Approach
+3.  **Input Data Paths**:
+    *   Paths to fine-tuned model adapters.
+    *   Paths to evaluation datasets (e.g., `~/bluesky_blueprint/scratch/evaluation_dataset/`).
 
-To compare models across different clusters:
-- Each model generates responses to all clusters' validation samples
-- We compare all model replies with the ground truth for each cluster
-- The model trained to imitate a specific cluster should perform best on that cluster's samples
-- This creates a matrix where diagonal elements should have the strongest similarity
+### Running the Evaluation Scripts
 
+#### 1. Generating Data for Evaluation
 
-## Pending Implementation
+See `generate_data` folder.
 
-- [ ] Classifier network for automated persona identification
-- [ ] Automatic authorship attribution tools
-- [ ] Update requirements.txt
+#### 2. Computing Metrics (`compute_metrics.py`)
 
-## Human Evaluation
+This script takes the generated data and reference data to compute evaluation metrics.
 
-For details on our human evaluation methodology, see:
-https://github.com/Scezaquer/SM-based-personas-human-eval
+**Command-line usage (example)**:
+```bash
+python compute_metrics.py \
+    --generated_file <path_to_generated_data.jsonl> \
+    --reference_file <path_to_reference_ground_truth.jsonl> \
+    --metrics <list_of_metrics_to_compute> \
+    --output_file <path_to_save_metrics_results.json> \
+    # ... other relevant arguments
+```
 
+**Using `job_script.sh` on a SLURM Cluster**:
+This script automates the execution of `compute_metrics.py`.
 
-TODO
-- [x] Penalize repeating tokens
-- [ ] Fix the weird message cutting behavior
-- [ ] Test how good the model is at following instructions after finetuning
-- [ ] ajust focal loss parameters. Currently the model nearly never uses actions.
-- [ ] maybe just use a slightly larger model
-- [ ] try without focal loss?
+*   **Modify** the SLURM directives and script parameters within `job_script.sh`.
+*   **Submit the job**:
+    ```bash
+    sbatch job_script.sh
+    ```
 
-Give cluster context to differentiate between real and fake tweets
+### Key Scripts and Components
 
-- do cluster sizes: 3, 25, 100, 1000
+*   `compute_metrics.py`: Calculates various performance metrics on the generated outputs.
+*   `utils.py`: Contains helper functions and utility classes used by the evaluation scripts (e.g., for data loading, metric calculation helpers).
+*   `job_script.sh`: SLURM job script, likely for `compute_metrics.py` or other evaluation tasks.
+*   `requirements.txt`: Lists Python dependencies for the evaluation environment.
+*   `compare_vs_gpt/`: Subdirectory potentially containing scripts or resources for comparative analysis against baseline models like GPT.
+
+### Input Data
+
+*   **Fine-tuned Models**: LoRA adapter weights and configurations from the fine-tuning stage.
+*   **Base Model**: The original pre-trained model used for fine-tuning.
+*   **Evaluation Datasets**: JSONL files or other formats containing prompts, conversation histories, or reference texts for the tasks being evaluated.
+
+### Output
+
+*   **Generated Data**: Files (e.g., JSONL) containing the outputs produced by the fine-tuned models on the evaluation datasets.
+*   **Metrics Reports**: Files (e.g., JSON, CSV, text) summarizing the computed performance metrics for each model or experiment.
+
+### Hardware Requirements
+
+*   **CPU/Memory**: `compute_metrics.py` might not be GPU-intensive but could require significant CPU and RAM depending on the dataset size.
+
+### Dependencies
+
+Key Python libraries are listed in `requirements.txt`. These typically include:
+*   `transformers`
+*   `peft` (if loading LoRA models)
+*   `datasets`
+*   `torch`
+
+Refer to `requirements.txt` for the complete list.

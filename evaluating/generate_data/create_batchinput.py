@@ -7,9 +7,9 @@ import toml
 USERNAME = getpass.getuser()
 FILENAME = "batchinput.jsonl"
 SOLUTIONS_FILENAME = "solutions.json"
-DATASET_PATH = f"/scratch/{USERNAME}/evaluation_dataset"
+DATASET_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset")
 CHAINS_PER_CLUSTER = 200
-PROMPTS_PATH = f"/home/{USERNAME}/SM-based-personas/shared/prompts.toml"
+PROMPTS_PATH = os.path.expanduser(f"~/bluesky_blueprint/shared/prompts.toml")
 
 def load_prompts():
     # System prompt as used during training
@@ -253,4 +253,3 @@ if __name__ == "__main__":
             print(f"Saved {len(solutions)} ground truth solutions to {SOLUTIONS_FILENAME}")
         else:
             print("No data loaded, exiting.")
-        

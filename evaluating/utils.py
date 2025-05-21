@@ -42,7 +42,7 @@ def load_model(model_path, model_name, username=getpass.getuser(), test_without_
         torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
-        cache_dir=f"/scratch/{username}/HF-cache"
+        cache_dir=os.path.expanduser(f"~/bluesky_blueprint/scratch/HF-cache")
     )
 
     # If the path points to a LoRA adapter, load it

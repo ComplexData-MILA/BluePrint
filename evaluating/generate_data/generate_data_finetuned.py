@@ -20,10 +20,10 @@ args = parser.parse_args()
 
 USERNAME = getpass.getuser()
 CHATGPT_INPUT_FILEPATH = "batchinput.jsonl"
-EVALUATION_DATASET_PATH = "/home/s4yor1/scratch/evaluation_dataset"
-MODEL_PATH = f"/scratch/{USERNAME}/Qwen/Qwen2.5-7B-Instruct-lora-finetuned-{args.slurm_array_task_id}{'-no-focal' if args.no_focal else ''}"
+EVALUATION_DATASET_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset")
+MODEL_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/Qwen/Qwen2.5-7B-Instruct-lora-finetuned-{args.slurm_array_task_id}{'-no-focal' if args.no_focal else ''}")
 MODEL_NAME = "Qwen/Qwen2.5-7B-Instruct"
-OUTPUT_PATH = "/home/s4yor1/scratch/test_outputs"
+OUTPUT_PATH = os.path.expanduser(f"~/bluesky_blueprint/scratch/test_outputs")
 
 def load_prompts():
     # System prompt as used during training
@@ -79,7 +79,7 @@ def load_model(model_name, username=getpass.getuser(), test_without_model=False)
         torch_dtype=torch.bfloat16,
         device_map="auto",
         trust_remote_code=True,
-        cache_dir=f"/scratch/{username}/HF-cache"
+        cache_dir=os.path.expanduser(f"~/bluesky_blueprint/scratch/HF-cache")
     )
 
     return base_model, tokenizer

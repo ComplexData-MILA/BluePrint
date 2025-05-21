@@ -16,7 +16,7 @@ for item in data:
     clusters[cluster_id].append({"custom_id": item["custom_id"], "content": item["response"]["body"]["choices"][0]["message"]["content"]})
 
 for cluster_id, items in clusters.items():
-    output_path = os.path.join("/home/s4yor1/scratch/evaluation_dataset", f"cluster_{cluster_id}", f"gpt4.1mini.jsonl")
+    output_path = os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset"), f"cluster_{cluster_id}", f"gpt4.1mini.jsonl")
     with open(output_path, "w") as f:
         for item in items:
             f.write(json.dumps([item]) + "\n")
@@ -40,15 +40,15 @@ for item in data:
     clusters[cluster_id].append({"custom_id": item["custom_id"], "content": content})
 
 for cluster_id, items in clusters.items():
-    output_path = os.path.join("/home/s4yor1/scratch/evaluation_dataset", f"cluster_{cluster_id}", f"o3mini.jsonl")
+    output_path = os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset"), f"cluster_{cluster_id}", f"o3mini.jsonl")
     with open(output_path, "w") as f:
         for item in items:
             f.write(json.dumps([item]) + "\n")
 
 
-for file in os.listdir("/home/s4yor1/scratch/test_outputs"):
+for file in os.listdir(os.path.expanduser(f"~/bluesky_blueprint/scratch/test_outputs")):
     if file.endswith(".jsonl"):
-        with open(os.path.join("/home/s4yor1/scratch/test_outputs", file), "r") as f:
+        with open(os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/test_outputs"), file), "r") as f:
             lines = f.readlines()
             data = [json.loads(line) for line in lines]
             print(f"File: {file}, Number of lines: {len(data)}")
@@ -69,11 +69,11 @@ for file in os.listdir("/home/s4yor1/scratch/test_outputs"):
 
     for cluster_id, items in clusters.items():
         if file.endswith('_not_finetuned.jsonl'):
-            output_path = os.path.join("/home/s4yor1/scratch/evaluation_dataset", f"cluster_{cluster_id}", f"not_finetuned.jsonl")
+            output_path = os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset"), f"cluster_{cluster_id}", f"not_finetuned.jsonl")
         elif file.endswith('-no-focal.jsonl'):
-            output_path = os.path.join("/home/s4yor1/scratch/evaluation_dataset", f"cluster_{cluster_id}", f"no_focal.jsonl")
+            output_path = os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset"), f"cluster_{cluster_id}", f"no_focal.jsonl")
         else:
-            output_path = os.path.join("/home/s4yor1/scratch/evaluation_dataset", f"cluster_{cluster_id}", f"finetuned.jsonl")
+            output_path = os.path.join(os.path.expanduser(f"~/bluesky_blueprint/scratch/evaluation_dataset"), f"cluster_{cluster_id}", f"finetuned.jsonl")
         with open(output_path, "w") as f:
             for item in items:
                 f.write(json.dumps([item]) + "\n")

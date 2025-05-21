@@ -173,7 +173,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-data_processing/Nov_03-04
+clustering/Nov_03-04
 gephi_graph.csv
 slurm-*
 *.tok
@@ -183,4 +183,8 @@ HF-cache/
 plots/
 datasets/
 k-means-constrained/
-data_processing/upload_to_drive/
+clustering/upload_to_drive/
+scratch/tmp.py
+scratch/caches
+scratch/generate_synthetic_posts.py
+scratch/placeholder_bluesky-2025-03-unaugmented
